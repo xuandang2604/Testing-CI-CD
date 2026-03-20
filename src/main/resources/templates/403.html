@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{auth-layout}">
+<head>
+    <title>403 – Không có quyền truy cập</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="auth-card" style="text-align:center; padding:48px 40px;">
+        <div style="font-size:72px; margin-bottom:16px;">🚫</div>
+        <h1 style="font-size:28px; font-weight:800; color:#d70018; margin-bottom:12px;">403</h1>
+        <h2 style="font-size:18px; font-weight:700; color:#333; margin-bottom:10px;">Không có quyền truy cập</h2>
+        <a th:href="@{/}" class="auth-btn" style="display:inline-block; width:auto; padding:12px 32px; text-decoration:none;">
+            <i class="fa-solid fa-house" style="margin-right:6px;"></i> Về trang chủ
+        </a>
+    </div>
+</div>
+</body>
+</html>
+

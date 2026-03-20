@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Đổi Điểm Tích Lũy</title>
+    <style>
+        /* ===== REWARDS PAGE ===== */
+        .rewards-page {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 24px 0 40px;
+        }
+
+        .rewards-page__heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+        }
+
+        .rewards-page__heading span.icon {
+            font-size: 28px;
+        }
+
+        /* Balance Card */
+        .rewards-balance {
+            background: linear-gradient(135deg, #d70018 0%, #ff6b35 100%);
+            border-radius: 16px;
+            padding: 28px 32px;
+            color: white;
+            margin-bottom: 28px;
+            box-shadow: 0 6px 24px rgba(215, 0, 24, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .rewards-balance__left .label {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-bottom: 6px;
+        }
+
+        .rewards-balance__left .points {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .rewards-balance__left .points-label {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .rewards-balance__right {
+            text-align: right;
+        }
+
+        .rewards-balance__right .label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .rewards-balance__right .money {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .rewards-balance__right .rate {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        /* Info Box */
+        .rewards-info {
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            border-left: 4px solid #ffc107;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: #7a5b00;
+            line-height: 1.7;
+        }
+
+        .rewards-info strong {
+            color: #5a3e00;
+        }
+
+        /* Redeem Form Card */
+        .rewards-form-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+        }
+
+        .rewards-form-card__title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rewards-form-group {
+            margin-bottom: 18px;
+        }
+
+        .rewards-form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 7px;
+        }
+
+        .rewards-form-label .sub {
+            font-weight: 400;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .rewards-input-wrap {
+            position: relative;
+        }
+
+        .rewards-input-wrap .r-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .rewards-input {
+            width: 100%;
+            padding: 11px 14px 11px 40px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 9px;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+        }
+
+        .rewards-input:focus {
+            border-color: #d70018;
+            box-shadow: 0 0 0 3px rgba(215, 0, 24, 0.08);
+            background: #fff;
+        }
+
+        /* Live preview */
+        .rewards-preview {
+            margin: 6px 0 0 2px;
+            font-size: 12px;
+            color: #d70018;
+            font-weight: 600;
+            min-height: 18px;
+        }
+
+        /* Email verification section */
+        .rewards-verify {
+            background: #f8f9ff;
+            border: 1.5px dashed #c5cae9;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-bottom: 20px;
+        }
+
+        .rewards-verify__title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #3949ab;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Submit button */
+        .rewards-submit-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #d70018 0%, #ff3333 100%);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 14px rgba(215, 0, 24, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .rewards-submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(215, 0, 24, 0.4);
+        }
+
+        .rewards-submit-btn:disabled {
+            background: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Alert */
+        .rewards-alert {
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .rewards-alert--error {
+            background: #fff0f0;
+            border: 1px solid #ffc5c5;
+            color: #c0392b;
+        }
+
+        .rewards-alert--success {
+            background: #f0fff4;
+            border: 1px solid #b2dfdb;
+            color: #1a7a4a;
+        }
+
+        /* Empty state */
+        .rewards-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888;
+        }
+
+        .rewards-empty .big-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+            opacity: 0.4;
+        }
+
+        /* History Table */
+        .rewards-history {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+            padding: 24px 28px;
+        }
+
+        .rewards-history__title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .rewards-balance {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .rewards-balance__right {
+                text-align: center;
+            }
+
+            .rewards-form-card {
+                padding: 20px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="rewards-page">
+
+        <div class="rewards-page__heading">
+            <span class="icon">⭐</span> Đổi Điểm Tích Lũy
+        </div>
+
+        <!-- Flash messages -->
+        <div th:if="${error}" class="rewards-alert rewards-alert--error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span th:text="${error}"></span>
+        </div>
+        <div th:if="${success}" class="rewards-alert rewards-alert--success">
+            <i class="fa-solid fa-circle-check"></i>
+            <span th:text="${success}"></span>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="rewards-balance">
+            <div class="rewards-balance__left">
+                <div class="label">Số điểm tích lũy của bạn</div>
+                <div class="points" th:text="${balance}">0</div>
+                <div class="points-label">điểm</div>
+            </div>
+            <div class="rewards-balance__right">
+                <div class="label">Quy đổi voucher tối đa</div>
+                <div class="money"
+                     th:text="${#numbers.formatDecimal(totalValue, 0, 'COMMA', 0, 'POINT')} + '₫'">0₫</div>
+                <div class="rate">1 điểm = 100₫ giảm giá</div>
+            </div>
+        </div>
+
+        <!-- Info -->
+        <div class="rewards-info">
+            <strong>📌 Quy tắc tích &amp; đổi điểm:</strong><br>
+            • Cứ mỗi <strong>7.500₫</strong> trong đơn hàng sẽ tích được <strong>1 điểm</strong> (cả COD &amp; MoMo).<br>
+            • Đổi điểm thành <strong>Voucher giảm giá</strong>: <strong>1 điểm = 100₫</strong> (ví dụ: 100 điểm → voucher 10.000₫).<br>
+            • Để đổi điểm, bạn cần <strong>xác thực email</strong> đã đăng ký tài khoản.<br>
+            • Voucher có hiệu lực <strong>30 ngày</strong> kể từ ngày cấp.<br>
+        </div>
+
+        <!-- No points state -->
+        <div class="rewards-empty" th:if="${balance <= 0}">
+            <div class="big-icon">⭐</div>
+            <p style="font-size:16px;font-weight:600;color:#555;">Bạn chưa có điểm tích lũy</p>
+            <p style="font-size:13px;margin-top:6px;">Hãy mua sắm để tích điểm và đổi quà hấp dẫn!</p>
+            <a th:href="@{/}" style="display:inline-block;margin-top:16px;padding:10px 24px;background:#d70018;color:white;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">
+                Mua sắm ngay
+            </a>
+        </div>
+
+        <!-- Redeem Form (show only if balance > 0) -->
+        <div th:if="${balance > 0}">
+            <div class="rewards-form-card">
+                <div class="rewards-form-card__title">
+                    <i class="fa-solid fa-ticket" style="color:#d70018;"></i> Đổi điểm lấy Voucher giảm giá
+                </div>
+
+                <form th:action="@{/rewards/redeem}" method="post" id="redeemForm">
+
+                    <!-- Points to redeem -->
+                    <div class="rewards-form-group">
+                        <label class="rewards-form-label" for="pointsToRedeem">
+                            Số điểm muốn đổi
+                            <span class="sub">(tối đa: <span th:text="${balance}"></span> điểm)</span>
+                        </label>
+                        <div class="rewards-input-wrap">
+                            <i class="fa-solid fa-star r-icon"></i>
+                            <input type="number" class="rewards-input" id="pointsToRedeem"
+                                   name="pointsToRedeem"
+                                   min="1" th:max="${balance}"
+                                   th:value="${prefillPoints}"
+                                   placeholder="Nhập số điểm muốn đổi..."
+                                   oninput="updatePreview(this.value)"
+                                   required>
+                        </div>
+                        <div class="rewards-preview" id="moneyPreview"></div>
+                    </div>
+
+                    <!-- Email verification -->
+                    <div class="rewards-verify">
+                        <div class="rewards-verify__title">
+                            <i class="fa-solid fa-shield-halved"></i> Xác thực danh tính qua email
+                        </div>
+                        <div class="rewards-form-group">
+                            <label class="rewards-form-label" for="confirmEmail">
+                                Nhập email đã đăng ký tài khoản
+                            </label>
+                            <div class="rewards-input-wrap">
+                                <i class="fa-solid fa-envelope r-icon"></i>
+                                <input type="email" class="rewards-input" id="confirmEmail"
+                                       name="confirmEmail"
+                                       th:value="${prefillEmail}"
+                                       placeholder="example@email.com"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="rewards-form-group" style="margin-bottom:10px;">
+                            <button type="submit"
+                                    th:formaction="@{/rewards/send-otp}"
+                                    formmethod="post"
+                                    formnovalidate
+                                    class="btn btn-outline-danger btn-sm">
+                                <i class="fa-solid fa-paper-plane"></i> Gửi mã OTP về email
+                            </button>
+                            <div style="font-size:12px;color:#666;margin-top:6px;">Mã OTP có hiệu lực 5 phút.</div>
+                        </div>
+
+                        <div class="rewards-form-group" style="margin-bottom:0;">
+                            <label class="rewards-form-label" for="otpCode">Nhập mã OTP nhận được</label>
+                            <div class="rewards-input-wrap">
+                                <i class="fa-solid fa-key r-icon"></i>
+                                <input type="text" class="rewards-input" id="otpCode"
+                                       name="otpCode"
+                                       th:value="${prefillOtp}"
+                                       maxlength="6"
+                                       pattern="[0-9]{6}"
+                                       placeholder="Nhập 6 số OTP"
+                                       required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="rewards-submit-btn" id="submitBtn">
+                        <i class="fa-solid fa-ticket"></i>
+                        Xác nhận đổi điểm lấy Voucher
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Voucher List -->
+        <div class="rewards-history" th:if="${vouchers != null and !vouchers.isEmpty()}">
+            <div class="rewards-history__title">
+                <i class="fa-solid fa-ticket" style="color:#d70018;margin-right:6px;"></i> Voucher của bạn
+            </div>
+            <div style="display:grid;gap:12px;">
+                <div th:each="v : ${vouchers}"
+                     th:style="${v.used} ? 'background:#f5f5f5;border:1.5px dashed #ccc;border-radius:12px;padding:16px 20px;opacity:0.6;' : 'background:linear-gradient(135deg,#fff8f0,#fff0f0);border:1.5px solid #ffcccc;border-radius:12px;padding:16px 20px;'">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                        <div>
+                            <div style="font-size:18px;font-weight:800;color:#d70018;letter-spacing:1px;font-family:monospace;"
+                                 th:text="${v.code}">VCH-XXXXXXXX</div>
+                            <div style="font-size:13px;color:#666;margin-top:4px;">
+                                Giảm <strong style="color:#d70018;"
+                                             th:text="${#numbers.formatDecimal(v.discountAmount,0,'COMMA',0,'POINT')} + '₫'">0₫</strong>
+                                · Đổi từ <span th:text="${v.pointsUsed}">0</span> điểm
+                            </div>
+                            <div style="font-size:12px;color:#999;margin-top:3px;">
+                                Hết hạn: <span th:text="${#temporals.format(v.expiresAt,'dd/MM/yyyy')}">--</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span th:if="${v.used}"
+                                  style="background:#ccc;color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;">
+                                Đã dùng
+                            </span>
+                            <span th:if="${!v.used}"
+                                  style="background:#d70018;color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;">
+                                Chưa dùng
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No vouchers yet -->
+        <div th:if="${vouchers == null or vouchers.isEmpty()}" style="text-align:center;padding:20px;color:#aaa;font-size:13px;">
+            <i class="fa-solid fa-ticket" style="font-size:28px;margin-bottom:8px;display:block;opacity:0.3;"></i>
+            Bạn chưa có voucher nào. Hãy đổi điểm để nhận voucher!
+        </div>
+
+    </div>
+
+    <script th:inline="javascript">
+        const maxPoints = /*[[${balance}]]*/ 0;
+        const valuePerPoint = /*[[${redeemValuePerPoint}]]*/ 100;
+
+        function updatePreview(val) {
+            const pts = parseInt(val);
+            const preview = document.getElementById('moneyPreview');
+            const submitBtn = document.getElementById('submitBtn');
+            if (!isNaN(pts) && pts > 0) {
+                if (pts > maxPoints) {
+                    preview.textContent = '⚠️ Vượt quá số điểm hiện có!';
+                    preview.style.color = '#e53935';
+                    submitBtn.disabled = true;
+                } else {
+                    const money = pts * valuePerPoint;
+                    preview.textContent = '→ Voucher giảm: ' + money.toLocaleString('vi-VN') + '₫';
+                    preview.style.color = '#d70018';
+                    submitBtn.disabled = false;
+                }
+            } else {
+                preview.textContent = '';
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
+</div>
+</body>
+</html>
+
+
+
