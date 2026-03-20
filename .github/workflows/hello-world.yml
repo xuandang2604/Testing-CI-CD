@@ -1,0 +1,19 @@
+name: TESTING CI/CD
+
+on:
+  push:
+    branches: [ "main" ]      #Chạy khi có code mới đẩy lên nhánh main
+
+jobs:
+  thuc_hanh_doc_file:
+    runs-on: ubuntu-latest    #Mượn máy ảo Ubuntu của GitHub để chạy
+
+    steps:
+      - name: Bước 1 - Xin chào
+        run: echo "Hello HUTECH!"    #Lệnh in ra màn hình
+
+      - name: Bước 2 - Tải code
+        uses: actions/checkout@v6.0.2    #Robot tự động copy code vào máy ảo
+
+      - name: Bước 3 - Đọc file
+        run: cat README.md           #Mở nội dung file README.md để xem
