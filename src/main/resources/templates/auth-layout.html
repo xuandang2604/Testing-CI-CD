@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XuanDang Shop</title>
+    <!-- Dùng chung CSS của trang home -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== AUTH MAIN (phần nội dung bên dưới header) ===== */
+        .auth-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px 60px;
+            background-image: url("https://cdnv2.tgdd.vn/webmwg/2024/ContentMwg/images/lunar_new_year/2026/TGDD/bg-main.png");
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        /* ===== AUTH CARD ===== */
+        .auth-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+            padding: 40px 40px 32px;
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .auth-card__brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .auth-card__brand-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #d70018 0%, #ff6b35 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            box-shadow: 0 4px 16px rgba(215,0,24,0.3);
+        }
+
+        .auth-card__brand-icon i { font-size: 28px; color: white; }
+
+        .auth-card__title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .auth-card__subtitle { font-size: 13px; color: #888; }
+
+        /* ===== FORM ELEMENTS ===== */
+        .auth-form-group { margin-bottom: 18px; }
+
+        .auth-form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 7px;
+        }
+
+        .auth-input-wrap { position: relative; }
+
+        .auth-input-wrap .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+        }
+
+        .auth-input:focus {
+            border-color: #d70018;
+            box-shadow: 0 0 0 3px rgba(215,0,24,0.08);
+            background: #fff;
+        }
+
+        .auth-input::placeholder { color: #bbb; }
+
+        /* Remember Me */
+        .auth-remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .auth-remember input[type="checkbox"] {
+            width: 16px; height: 16px;
+            accent-color: #d70018; cursor: pointer;
+        }
+
+        .auth-remember label { font-size: 13px; color: #555; cursor: pointer; }
+
+        /* Submit Button */
+        .auth-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #d70018 0%, #ff3333 100%);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 14px rgba(215,0,24,0.35);
+            letter-spacing: 0.3px;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(215,0,24,0.4);
+        }
+
+        .auth-btn:active { transform: translateY(0); }
+
+        /* Switch Link */
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .auth-switch a {
+            color: #d70018;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-switch a:hover { text-decoration: underline; }
+
+        /* Alert */
+        .auth-alert {
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .auth-alert--error {
+            background: #fff0f0;
+            border: 1px solid #ffc5c5;
+            color: #c0392b;
+        }
+
+        .auth-alert--success {
+            background: #f0fff4;
+            border: 1px solid #b2dfdb;
+            color: #1a7a4a;
+        }
+
+        .auth-alert ul { margin: 0; padding-left: 16px; }
+
+        /* Footer */
+        .auth-footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 12px;
+            color: #aaa;
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .auth-footer a { color: #aaa; text-decoration: none; }
+        .auth-footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 480px) {
+            .auth-card { padding: 28px 20px 24px; border-radius: 12px; }
+        }
+    </style>
+</head>
+
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+
+    <!-- ===== HEADER TRANG HOME (giữ nguyên) ===== -->
+    <header class="header">
+        <div class="container">
+            <div class="header__top">
+                <!-- Logo -->
+                <a th:href="@{/}" class="header__logo">
+                    <img th:src="@{https://cdnv2.tgdd.vn/webmwg/2024/ContentMwg/images/lunar_new_year/2026/TGDD/logo-dt.png}"
+                         alt="XuanDang Shop" class="header__logo-img">
+                </a>
+
+                <!-- Search -->
+                <div class="header__search">
+                    <input type="text" class="header__search-input" placeholder="Bạn tìm gì...">
+                    <button class="header__search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+
+                <!-- Actions -->
+                <div class="header__actions">
+                    <div class="header__action-item">
+                        <a th:href="@{/orders}">
+                            <i class="fa-solid fa-receipt" style="font-size:16px;"></i><br>Lịch sử<br>đơn hàng
+                        </a>
+                    </div>
+                    <div class="header__action-item header__action-item--cart">
+                        <a th:href="@{/cart}">
+                            <i class="fa-solid fa-cart-shopping"></i><br>Giỏ hàng
+                        </a>
+                    </div>
+                    <!-- Chưa đăng nhập -->
+                    <div class="header__action-item" sec:authorize="isAnonymous()">
+                        <a th:href="@{/login}">
+                            <i class="fa-solid fa-right-to-bracket" style="font-size:16px;"></i><br>Đăng nhập
+                        </a>
+                    </div>
+                    <!-- Đã đăng nhập -->
+                    <div class="header__action-item header__action-dropdown" sec:authorize="isAuthenticated()">
+                        <a href="#" class="header__user-trigger">
+                            <i class="fa-solid fa-circle-user" style="font-size:18px;"></i><br>
+                            <span sec:authentication="name">Tài khoản</span>
+                            <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
+                        </a>
+                        <div class="header__user-dropdown">
+                            <div class="header__user-dropdown-name">
+                                <i class="fa-solid fa-circle-user"></i>
+                                <span sec:authentication="name">User</span>
+                            </div>
+                            <a th:href="@{/}" class="header__user-dropdown-item">
+                                <i class="fa-solid fa-house"></i> Trang chủ
+                            </a>
+                            <a sec:authorize="hasAuthority('USER')" th:href="@{/rewards}" class="header__user-dropdown-item">
+                                <i class="fa-solid fa-star" style="color:#ffc107;"></i> Đổi điểm tích lũy
+                            </a>
+                            <div sec:authorize="hasAnyAuthority('ADMIN','MANAGER')" class="header__user-dropdown-divider"></div>
+                            <a sec:authorize="hasAnyAuthority('ADMIN','MANAGER')" th:href="@{/products/add}" class="header__user-dropdown-item">
+                                <i class="fa-solid fa-plus"></i> Thêm sản phẩm
+                            </a>
+                            <a sec:authorize="hasAnyAuthority('ADMIN','MANAGER')" th:href="@{/categories/add}" class="header__user-dropdown-item">
+                                <i class="fa-solid fa-folder-plus"></i> Thêm danh mục
+                            </a>
+                            <div class="header__user-dropdown-divider"></div>
+                            <form th:action="@{/logout}" method="post" style="margin:0;">
+                                <button type="submit" class="header__user-dropdown-item header__user-dropdown-item--logout" style="width:100%;border:0;background:transparent;cursor:pointer;">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Nội dung trang login / register -->
+    <main class="auth-main">
+        <div layout:fragment="content">
+            <!-- Content inserted here -->
+        </div>
+    </main>
+
+    <!-- Footer nhỏ -->
+    <footer class="auth-footer">
+        <p>© 2025 XuanDang Shop · <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản</a></p>
+    </footer>
+
+</body>
+</html>
+
