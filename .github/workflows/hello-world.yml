@@ -36,7 +36,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/testing-ci-cd:latest
             ${{ secrets.DOCKER_USERNAME }}/testing-ci-cd:${{ github.sha }}
-       - name: Triển khai lên DevOps Classroom
+      - name: Triển khai lên DevOps Classroom
         run: |
           REPO="xuandang2604/testing-ci-cd"
           CONTAINER_PORT=80
