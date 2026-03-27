@@ -34,16 +34,11 @@ jobs:
             
       - name: Triển khai lên DevOps Classroom
         run: |
-          REPO="xuandang2604/testing-ci-cd"
+          REPO="repository/docker"
           CONTAINER_PORT=80
-          
-          # Thêm --max-time 120 để giới hạn thời gian chờ là 120s tránh treo CI
-          RESPONSE=$(curl -sS --max-time 120 -w "\n%{http_code}" -X POST "${{ secrets.DEPLOY_URL }}?repo=$REPO&tag=latest&slot=2&container_port=$CONTAINER_PORT&strict_container_port=0")
-          
-          # Đã sửa "$d" thành '$d'
-          BODY=$(echo "$RESPONSE" | sed '$d')
+          RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "${{ secrets.DEPLOY_URL }}?repo=$REPO&tag=latest&slot=2&container_port=$CONTAINER_PORT&strict_container_port=0")
+          BODY=$(echo "$RESPONSE" | sed "$d")
           CODE=$(echo "$RESPONSE" | tail -n1)
-          
           echo "Webhook HTTP: $CODE"
           if [ "$CODE" -lt 200 ] || [ "$CODE" -ge 300 ]; then
             echo "Deploy thất bại. Xem chi tiết trong nhóm log bên dưới."
@@ -52,8 +47,7 @@ jobs:
             echo "::endgroup::"
             exit 1
           fi
-          
           echo "Deploy thành công."
           echo "::group::Chi tiết webhook JSON"
           echo "$BODY" | python3 -m json.tool 2>/dev/null || echo "$BODY"
-          echo "::endgroup::"
+          echo "::endgroup::""
